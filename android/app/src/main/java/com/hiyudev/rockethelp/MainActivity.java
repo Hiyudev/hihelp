@@ -1,4 +1,4 @@
-package com.reactnative;
+package com.hiyudev.rockethelp;
 
 import android.os.Build;
 import android.os.Bundle;

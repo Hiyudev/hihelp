@@ -58,7 +58,7 @@ export function Home() {
           alignItems={"center"}
         >
           <Heading color={"gray.100"}>Solicitações</Heading>
-          <Text color={"gray.200"}>{orders.length}</Text>
+          <Text color={"gray.200"}>{orders?.length ?? 0}</Text>
         </HStack>
 
         <HStack space={3} mb={8}>
@@ -78,7 +78,7 @@ export function Home() {
         </HStack>
 
         <FlatList
-          data={orders}
+          data={orders ?? []}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Order onPress={() => handleOpenDetails(item.id)} data={item} />

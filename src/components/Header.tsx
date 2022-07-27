@@ -30,6 +30,7 @@ export function Header({ title, ...rest }: HeaderComponentProps) {
       pt={12}
       pb={6}
       px={4}
+      {...rest}
     >
       <IconButton
         onPress={handleGoBack}

@@ -1,31 +1,31 @@
 import {
-  VStack,
   Heading,
-  Icon,
-  useTheme,
-  useColorModeValue,
   HStack,
+  Icon,
   IconButton,
   useColorMode,
+  useColorModeValue,
+  useTheme,
+  VStack,
   Text,
 } from "native-base";
-import { Envelope, Key, Moon, Sun } from "phosphor-react-native";
-import { useState } from "react";
+import React, { useState } from "react";
+import { Alert } from "react-native";
 import auth from "@react-native-firebase/auth";
-
+import { useNavigation } from "@react-navigation/native";
+import { Moon, Sun, Envelope, Key } from "phosphor-react-native";
 import Logo from "../assets/Logo.svg";
 
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
-import { Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
-export function SignIn() {
+export function SignUp() {
   const { colors } = useTheme();
   const { toggleColorMode, colorMode } = useColorMode();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
   const navigation = useNavigation();
 
   const bgColor = useColorModeValue("gray.100", "gray.900");
@@ -33,15 +33,19 @@ export function SignIn() {
   const txtColor = useColorModeValue("gray.900", "gray.100");
   const txtColorObj = useColorModeValue(colors.gray[700], colors.gray[300]);
 
-  function handleSignIn() {
+  function handleSignUp() {
     if (!email || !password) {
-      return Alert.alert("Entrar", "Informe e-mail e senha.");
+      return Alert.alert("Cadastrar", "Informe e-mail e senha.");
+    }
+
+    if (!cpassword || cpassword !== password) {
+      return Alert.alert("Cadastrar", "As senhas não se coencidem.");
     }
 
     setIsLoading(true);
 
     auth()
-      .signInWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(email, password)
       .catch((error) => {
         console.log(error);
         const errorCode = error.code;
@@ -49,18 +53,19 @@ export function SignIn() {
 
         switch (errorCode) {
           case "auth/invalid-email":
-            return Alert.alert("Entrar", "E-mail inválido.");
-          case "auth/user-not-found":
-          case "auth/wrong-password":
-            return Alert.alert("Entrar", "E-mail ou senha inválida.");
+            return Alert.alert("Cadastrar", "E-mail inválido.");
+          case "auth/weak-password":
+            return Alert.alert("Cadastrar", "Senha fraca.");
+          case "auth/email-already-in-use":
+            return Alert.alert("Cadastrar", "E-mail já em uso.");
           default:
-            return Alert.alert("Entrar", "Erro ao entrar.");
+            return Alert.alert("Cadastrar", "Erro ao entrar.");
         }
       });
   }
 
-  const handleGoSignUp = () => {
-    navigation.navigate("signup");
+  const handleGoSignIn = () => {
+    navigation.navigate("signin");
   };
 
   const handleChangeTheme = () => {
@@ -90,7 +95,7 @@ export function SignIn() {
         </HStack>
 
         <Heading color={txtColor} fontSize="xl" mt={20} mb={6}>
-          Acesse sua conta
+          Cadastre uma nova conta
         </Heading>
 
         <Input
@@ -103,20 +108,27 @@ export function SignIn() {
         />
         <Input
           secureTextEntry
-          mb={8}
+          mb={4}
           placeholder="Senha"
           InputLeftElement={<Icon ml={4} as={<Key color={txtColorObj} />} />}
           onChangeText={setPassword}
         />
+        <Input
+          secureTextEntry
+          mb={8}
+          placeholder="Confirme a senha"
+          InputLeftElement={<Icon ml={4} as={<Key color={txtColorObj} />} />}
+          onChangeText={setCPassword}
+        />
         <Button
           isLoading={isLoading}
-          title="Entrar"
+          title="Cadastrar"
           w="full"
-          onPress={handleSignIn}
+          onPress={handleSignUp}
         />
 
-        <Text onPress={handleGoSignUp} mt={4}>
-          Cadastrar-se
+        <Text onPress={handleGoSignIn} mt={4}>
+          Logar em uma conta
         </Text>
       </VStack>
     </>

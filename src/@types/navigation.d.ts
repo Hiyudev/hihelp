@@ -4,6 +4,8 @@ export declare global {
       nome: undefined;
       new: undefined;
       details: { orderId: string };
+      signup: undefined;
+      signin: undefined;
     }
   }
 }

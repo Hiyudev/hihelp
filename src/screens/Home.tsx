@@ -14,7 +14,7 @@ import {
 import { ChatTeardropText, SignOut } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 
-import Logo from "../assets/logo_secondary.svg";
+import Logo from "../assets/Logotipo.svg";
 import { Button } from "../components/Button";
 import { Filter } from "../components/Filter";
 import { Order, OrderProps } from "../components/Order";

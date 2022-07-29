@@ -2,9 +2,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { useState, useEffect } from "react";
 
-import { SignIn } from "../screens/SignIn";
 import { AppRoutes } from "./App.routes";
+import { LoginRoutes } from "./Login.routes";
 import { Loading } from "../components/Loading";
+import { StatusBar } from "react-native";
+import { useColorModeValue } from "native-base";
 
 export function Routes() {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,8 +26,15 @@ export function Routes() {
   }
 
   return (
-    <NavigationContainer>
-      {user ? <AppRoutes /> : <SignIn />}
-    </NavigationContainer>
+    <>
+      <StatusBar
+        barStyle={useColorModeValue("dark-content", "light-content")}
+        backgroundColor={"transparent"}
+        translucent
+      />
+      <NavigationContainer>
+        {user ? <AppRoutes /> : <LoginRoutes />}
+      </NavigationContainer>
+    </>
   );
 }

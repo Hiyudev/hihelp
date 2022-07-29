@@ -11,11 +11,11 @@ type IButtonProps = NativeBaseIButtonProps & {
 export function Button({ title, ...rest }: IButtonProps) {
   return (
     <NativeBaseButton
-      bg="green.700"
+      bg="indigo.700"
       h={14}
       fontSize="sm"
       rounded="sm"
-      _pressed={{ backgroundColor: "green.500" }}
+      _pressed={{ backgroundColor: "indigo.500" }}
       {...rest}
     >
       <Heading color="white" fontSize="sm">

@@ -8,6 +8,9 @@
     "ios": "expo run:ios",
     "web": "expo start --web"
   },
+  "eslintConfig": {
+    "extends": "universe/native"
+  },
   "dependencies": {
     "@expo-google-fonts/roboto": "^0.2.2",
     "@react-native-firebase/app": "^15.2.0",
@@ -33,6 +36,11 @@
     "@babel/core": "^7.12.9",
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.67.6",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.21.0",
+    "eslint-config-universe": "^11.0.0",
+    "prettier": "^2.7.1",
     "react-native-svg-transformer": "^1.0.0",
     "typescript": "~4.3.5"
   },

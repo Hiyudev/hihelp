@@ -1,3 +1,5 @@
+import auth from "@react-native-firebase/auth";
+import { useNavigation } from "@react-navigation/native";
 import {
   VStack,
   Heading,
@@ -11,14 +13,11 @@ import {
 } from "native-base";
 import { Envelope, Key, Moon, Sun } from "phosphor-react-native";
 import { useState } from "react";
-import auth from "@react-native-firebase/auth";
+import { Alert } from "react-native";
 
 import Logo from "../assets/Logo.svg";
-
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
-import { Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
 export function SignIn() {
   const { colors } = useTheme();
@@ -75,14 +74,14 @@ export function SignIn() {
     <>
       <VStack flex={1} alignItems="center" bg={bgColor} px={8} pt={24}>
         <IconButton
-          position={"absolute"}
+          position="absolute"
           right={8}
           top={8}
           bg={sbgColor}
           rounded="full"
           onPress={handleChangeTheme}
           icon={
-            colorMode == "dark" ? (
+            colorMode === "dark" ? (
               <Moon size={24} color={colors.blue[300]} />
             ) : (
               <Sun size={24} color={colors.orange[700]} />

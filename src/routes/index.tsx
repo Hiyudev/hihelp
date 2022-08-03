@@ -1,16 +1,15 @@
-import { NavigationContainer } from "@react-navigation/native";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { Text, useColorModeValue } from "native-base";
 import { useState, useEffect } from "react";
-
-import { AppRoutes } from "./App.routes";
-import { LoginRoutes } from "./Login.routes";
-import { Loading } from "../components/Loading";
 import { StatusBar } from "react-native";
-import { useColorModeValue } from "native-base";
+
+import { Loading } from "../components/Loading";
+import { AppRoutes } from "./App.routes";
 
 export function Routes() {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<FirebaseAuthTypes.User>();
+  const barStyle = useColorModeValue("dark-content", "light-content");
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged((res) => {
@@ -28,13 +27,11 @@ export function Routes() {
   return (
     <>
       <StatusBar
-        barStyle={useColorModeValue("dark-content", "light-content")}
-        backgroundColor={"transparent"}
+        barStyle={barStyle}
+        backgroundColor="transparent"
         translucent
       />
-      <NavigationContainer>
-        {user ? <AppRoutes /> : <LoginRoutes />}
-      </NavigationContainer>
+      <AppRoutes isSignedIn={!!user} />
     </>
   );
 }

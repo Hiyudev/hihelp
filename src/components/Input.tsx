@@ -2,7 +2,12 @@ import {
   Input as NativeBaseInput,
   IInputProps,
   useColorModeValue,
+  IconButton,
+  Icon,
+  useTheme,
 } from "native-base";
+import { Eye, EyeSlash } from "phosphor-react-native";
+import { useState } from "react";
 
 export function Input({ ...rest }: IInputProps) {
   const bgColor = useColorModeValue("gray.300", "gray.700");
@@ -24,6 +29,37 @@ export function Input({ ...rest }: IInputProps) {
         borderColor: "green.500",
         bg: bgColor,
       }}
+      {...rest}
+    />
+  );
+}
+
+export function ShowInput({ ...rest }: IInputProps) {
+  const { colors } = useTheme();
+  const txtColor = useColorModeValue(colors.gray[700], colors.gray[300]);
+
+  const [show, setShow] = useState(false);
+
+  const handleShowPassword = () => {
+    setShow((old) => !old);
+  };
+
+  return (
+    <Input
+      secureTextEntry={!show}
+      InputRightElement={
+        <IconButton
+          mr={4}
+          onPress={handleShowPassword}
+          icon={
+            <Icon
+              as={
+                show ? <Eye color={txtColor} /> : <EyeSlash color={txtColor} />
+              }
+            />
+          }
+        />
+      }
       {...rest}
     />
   );

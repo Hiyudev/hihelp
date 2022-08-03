@@ -18,7 +18,7 @@ import { Moon, Sun, Envelope, Key } from "phosphor-react-native";
 import Logo from "../../assets/Logo.svg";
 
 import { Button } from "../../components/Button";
-import { Input } from "../../components/Input";
+import { Input, ShowInput } from "../../components/Input";
 
 export function SignUp() {
   const { colors } = useTheme();
@@ -107,15 +107,13 @@ export function SignUp() {
           }
           onChangeText={setEmail}
         />
-        <Input
-          secureTextEntry
+        <ShowInput
           mb={4}
           placeholder="Senha"
           InputLeftElement={<Icon ml={4} as={<Key color={txtColorObj} />} />}
           onChangeText={setPassword}
         />
-        <Input
-          secureTextEntry
+        <ShowInput
           mb={8}
           placeholder="Confirme a senha"
           InputLeftElement={<Icon ml={4} as={<Key color={txtColorObj} />} />}

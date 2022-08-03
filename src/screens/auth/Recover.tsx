@@ -9,7 +9,7 @@ import {
   useColorMode,
   Text,
 } from "native-base";
-import { Envelope, Key, Moon, Sun } from "phosphor-react-native";
+import { Envelope, Moon, Sun } from "phosphor-react-native";
 import { useState } from "react";
 import auth from "@react-native-firebase/auth";
 

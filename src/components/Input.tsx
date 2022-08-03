@@ -11,7 +11,7 @@ export function Input({ ...rest }: IInputProps) {
   return (
     <NativeBaseInput
       bg={bgColor}
-      h={14}
+      h={54}
       size={"md"}
       borderWidth={2}
       borderColor={bgColor}

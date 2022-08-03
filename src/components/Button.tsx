@@ -12,7 +12,7 @@ export function Button({ title, ...rest }: IButtonProps) {
   return (
     <NativeBaseButton
       bg="indigo.700"
-      h={14}
+      h={54}
       fontSize="sm"
       rounded="sm"
       _pressed={{ backgroundColor: "indigo.500" }}

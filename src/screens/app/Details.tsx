@@ -9,15 +9,15 @@ import {
 } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { Alert } from "react-native";
-import { Button } from "../components/Button";
-import { CardDetails } from "../components/CardDetails";
+import { Button } from "../../components/Button";
+import { CardDetails } from "../../components/CardDetails";
 
-import { Header } from "../components/Header";
-import { Input } from "../components/Input";
-import { Loading } from "../components/Loading";
-import { OrderProps } from "../components/Order";
-import { OrderFirestoreDTO } from "../DTOs/OrderFirestoreDTO";
-import { formatFirestoreDate } from "../utils/firestoreDateFormat";
+import { Header } from "../../components/Header";
+import { Input } from "../../components/Input";
+import { Loading } from "../../components/Loading";
+import { OrderProps } from "../../components/Order";
+import { OrderFirestoreDTO } from "../../DTOs/OrderFirestoreDTO";
+import { formatFirestoreDate } from "../../utils/firestoreDateFormat";
 
 type RouteParams = {
   orderId: string;

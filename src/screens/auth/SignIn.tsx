@@ -1,31 +1,30 @@
-import {
-  Heading,
-  HStack,
-  Icon,
-  IconButton,
-  useColorMode,
-  useColorModeValue,
-  useTheme,
-  VStack,
-  Text,
-} from "native-base";
-import React, { useState } from "react";
-import { Alert } from "react-native";
 import auth from "@react-native-firebase/auth";
 import { useNavigation } from "@react-navigation/native";
-import { Moon, Sun, Envelope, Key } from "phosphor-react-native";
-import Logo from "../assets/Logo.svg";
+import {
+  VStack,
+  Heading,
+  Icon,
+  useTheme,
+  useColorModeValue,
+  HStack,
+  IconButton,
+  useColorMode,
+  Text,
+} from "native-base";
+import { Envelope, Key, Moon, Sun } from "phosphor-react-native";
+import { useState } from "react";
+import { Alert } from "react-native";
 
-import { Button } from "../components/Button";
-import { Input } from "../components/Input";
+import Logo from "../../assets/Logo.svg";
+import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
 
-export function SignUp() {
+export function SignIn() {
   const { colors } = useTheme();
   const { toggleColorMode, colorMode } = useColorMode();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [cpassword, setCPassword] = useState("");
   const navigation = useNavigation();
 
   const bgColor = useColorModeValue("gray.100", "gray.900");
@@ -33,19 +32,15 @@ export function SignUp() {
   const txtColor = useColorModeValue("gray.900", "gray.100");
   const txtColorObj = useColorModeValue(colors.gray[700], colors.gray[300]);
 
-  function handleSignUp() {
+  function handleSignIn() {
     if (!email || !password) {
-      return Alert.alert("Cadastrar", "Informe e-mail e senha.");
-    }
-
-    if (!cpassword || cpassword !== password) {
-      return Alert.alert("Cadastrar", "As senhas não se coencidem.");
+      return Alert.alert("Entrar", "Informe e-mail e senha.");
     }
 
     setIsLoading(true);
 
     auth()
-      .createUserWithEmailAndPassword(email, password)
+      .signInWithEmailAndPassword(email, password)
       .catch((error) => {
         console.log(error);
         const errorCode = error.code;
@@ -53,19 +48,22 @@ export function SignUp() {
 
         switch (errorCode) {
           case "auth/invalid-email":
-            return Alert.alert("Cadastrar", "E-mail inválido.");
-          case "auth/weak-password":
-            return Alert.alert("Cadastrar", "Senha fraca.");
-          case "auth/email-already-in-use":
-            return Alert.alert("Cadastrar", "E-mail já em uso.");
+            return Alert.alert("Entrar", "E-mail inválido.");
+          case "auth/user-not-found":
+          case "auth/wrong-password":
+            return Alert.alert("Entrar", "E-mail ou senha inválida.");
           default:
-            return Alert.alert("Cadastrar", "Erro ao entrar.");
+            return Alert.alert("Entrar", "Erro ao entrar.");
         }
       });
   }
 
-  const handleGoSignIn = () => {
-    navigation.navigate("signin");
+  const handleGoSignUp = () => {
+    navigation.navigate("signup");
+  };
+
+  const handleGoRecover = () => {
+    navigation.navigate("recover");
   };
 
   const handleChangeTheme = () => {
@@ -76,14 +74,14 @@ export function SignUp() {
     <>
       <VStack flex={1} alignItems="center" bg={bgColor} px={8} pt={24}>
         <IconButton
-          position={"absolute"}
+          position="absolute"
           right={8}
           top={8}
           bg={sbgColor}
           rounded="full"
           onPress={handleChangeTheme}
           icon={
-            colorMode == "dark" ? (
+            colorMode === "dark" ? (
               <Moon size={24} color={colors.blue[300]} />
             ) : (
               <Sun size={24} color={colors.orange[700]} />
@@ -95,7 +93,7 @@ export function SignUp() {
         </HStack>
 
         <Heading color={txtColor} fontSize="xl" mt={20} mb={6}>
-          Cadastre uma nova conta
+          Acesse sua conta
         </Heading>
 
         <Input
@@ -108,27 +106,24 @@ export function SignUp() {
         />
         <Input
           secureTextEntry
-          mb={4}
+          mb={8}
           placeholder="Senha"
           InputLeftElement={<Icon ml={4} as={<Key color={txtColorObj} />} />}
           onChangeText={setPassword}
         />
-        <Input
-          secureTextEntry
-          mb={8}
-          placeholder="Confirme a senha"
-          InputLeftElement={<Icon ml={4} as={<Key color={txtColorObj} />} />}
-          onChangeText={setCPassword}
-        />
         <Button
           isLoading={isLoading}
-          title="Cadastrar"
+          title="Entrar"
           w="full"
-          onPress={handleSignUp}
+          onPress={handleSignIn}
         />
 
-        <Text onPress={handleGoSignIn} mt={4}>
-          Logar em uma conta
+        <Text onPress={handleGoSignUp} mt={4}>
+          Cadastrar-se
+        </Text>
+
+        <Text onPress={handleGoRecover} mt={4}>
+          Recuperar senha
         </Text>
       </VStack>
     </>

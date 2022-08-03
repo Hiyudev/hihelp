@@ -14,13 +14,13 @@ import {
 import { ChatTeardropText, SignOut } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 
-import Logo from "../assets/Logotipo.svg";
-import { Button } from "../components/Button";
-import { Filter } from "../components/Filter";
-import { Order, OrderProps } from "../components/Order";
+import Logo from "../../assets/Logotipo.svg";
+import { Button } from "../../components/Button";
+import { Filter } from "../../components/Filter";
+import { Order, OrderProps } from "../../components/Order";
 import { Alert } from "react-native";
-import { formatFirestoreDate } from "../utils/firestoreDateFormat";
-import { Loading } from "../components/Loading";
+import { formatFirestoreDate } from "../../utils/firestoreDateFormat";
+import { Loading } from "../../components/Loading";
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);

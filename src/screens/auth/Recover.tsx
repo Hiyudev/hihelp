@@ -1,5 +1,3 @@
-import auth from "@react-native-firebase/auth";
-import { useNavigation } from "@react-navigation/native";
 import {
   VStack,
   Heading,
@@ -13,18 +11,20 @@ import {
 } from "native-base";
 import { Envelope, Key, Moon, Sun } from "phosphor-react-native";
 import { useState } from "react";
+import auth from "@react-native-firebase/auth";
+
+import Logo from "../../assets/Logo.svg";
+
+import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
 import { Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-import Logo from "../assets/Logo.svg";
-import { Button } from "../components/Button";
-import { Input } from "../components/Input";
-
-export function SignIn() {
+export function Recover() {
   const { colors } = useTheme();
   const { toggleColorMode, colorMode } = useColorMode();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
   const bgColor = useColorModeValue("gray.100", "gray.900");
@@ -33,14 +33,22 @@ export function SignIn() {
   const txtColorObj = useColorModeValue(colors.gray[700], colors.gray[300]);
 
   function handleSignIn() {
-    if (!email || !password) {
-      return Alert.alert("Entrar", "Informe e-mail e senha.");
+    if (!email) {
+      return Alert.alert("Recuperar", "Informe e-mail para recuperar senha.");
     }
 
     setIsLoading(true);
 
     auth()
-      .signInWithEmailAndPassword(email, password)
+      .sendPasswordResetEmail(email)
+      .then(() => {
+        setIsLoading(false);
+        Alert.alert(
+          "Recuperar",
+          "E-mail para redefinir a senha foi enviada com sucesso."
+        );
+        navigation.navigate("signin");
+      })
       .catch((error) => {
         console.log(error);
         const errorCode = error.code;
@@ -48,22 +56,16 @@ export function SignIn() {
 
         switch (errorCode) {
           case "auth/invalid-email":
-            return Alert.alert("Entrar", "E-mail inválido.");
+            return Alert.alert("Recuperar", "E-mail inválido.");
           case "auth/user-not-found":
-          case "auth/wrong-password":
-            return Alert.alert("Entrar", "E-mail ou senha inválida.");
           default:
-            return Alert.alert("Entrar", "Erro ao entrar.");
+            return Alert.alert("Recuperar", "E-mail inválido.");
         }
       });
   }
 
-  const handleGoSignUp = () => {
-    navigation.navigate("signup");
-  };
-
-  const handleGoRecover = () => {
-    navigation.navigate("recover");
+  const handleGoBack = () => {
+    navigation.goBack();
   };
 
   const handleChangeTheme = () => {
@@ -74,14 +76,14 @@ export function SignIn() {
     <>
       <VStack flex={1} alignItems="center" bg={bgColor} px={8} pt={24}>
         <IconButton
-          position="absolute"
+          position={"absolute"}
           right={8}
           top={8}
           bg={sbgColor}
           rounded="full"
           onPress={handleChangeTheme}
           icon={
-            colorMode === "dark" ? (
+            colorMode == "dark" ? (
               <Moon size={24} color={colors.blue[300]} />
             ) : (
               <Sun size={24} color={colors.orange[700]} />
@@ -93,7 +95,7 @@ export function SignIn() {
         </HStack>
 
         <Heading color={txtColor} fontSize="xl" mt={20} mb={6}>
-          Acesse sua conta
+          Recuperar a sua senha
         </Heading>
 
         <Input
@@ -104,26 +106,16 @@ export function SignIn() {
           }
           onChangeText={setEmail}
         />
-        <Input
-          secureTextEntry
-          mb={8}
-          placeholder="Senha"
-          InputLeftElement={<Icon ml={4} as={<Key color={txtColorObj} />} />}
-          onChangeText={setPassword}
-        />
+
         <Button
           isLoading={isLoading}
-          title="Entrar"
+          title="Recuperar"
           w="full"
           onPress={handleSignIn}
         />
 
-        <Text onPress={handleGoSignUp} mt={4}>
-          Cadastrar-se
-        </Text>
-
-        <Text onPress={handleGoRecover} mt={4}>
-          Recuperar senha
+        <Text onPress={handleGoBack} mt={4}>
+          Voltar
         </Text>
       </VStack>
     </>

@@ -1,11 +1,12 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { Details } from "../screens/Details";
-import { Home } from "../screens/Home";
-import { Recover } from "../screens/Recover";
-import { Register } from "../screens/Register";
-import { SignUp } from "../screens/SignUp";
-import { SignIn } from "../screens/SignIn";
+import { Details } from "../screens/app/Details";
+import { Home } from "../screens/app/Home";
+import { Register } from "../screens/app/Register";
+
+import { Recover } from "../screens/auth/Recover";
+import { SignUp } from "../screens/auth/SignUp";
+import { SignIn } from "../screens/auth/SignIn";
 
 const { Navigator, Screen } = createNativeStackNavigator();
 

@@ -20,7 +20,7 @@ import Logo from "../../assets/Logo.svg";
 
 import { Button } from "../../components/Button";
 import { Input, ShowInput } from "../../components/Input";
-import { SignUpFormValidation } from "../../lib/zod/signUpValdiation";
+import { SignUpFormValidation } from "../../lib/zod/signUpValidation";
 import { z } from "zod";
 
 export function SignUp() {

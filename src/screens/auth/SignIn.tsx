@@ -73,18 +73,19 @@ export function SignIn() {
     } catch (err) {
       if (err instanceof z.ZodError) {
         const issues = err.issues;
-        issues.map((issue) => {
-          switch (issue.path[0]) {
-            case "email":
-              setEmailError(issue.message);
-              break;
-            case "password":
-              setPasswordError(issue.message);
-              break;
-          }
-
+        if (issues.length > 0) {
+          issues.map((issue) => {
+            switch (issue.path[0]) {
+              case "email":
+                setEmailError(issue.message);
+                break;
+              case "password":
+                setPasswordError(issue.message);
+                break;
+            }
+          });
           setGenerticError(true);
-        });
+        }
       }
     }
   }
@@ -131,7 +132,7 @@ export function SignIn() {
           <Logo color={useColorModeValue("black", "white")} />
         </HStack>
 
-        <Heading color={txtColor} fontSize="xl" mt={20} mb={6}>
+        <Heading color={txtColor} fontSize="xl" mt={16} mb={6}>
           Acesse sua conta
         </Heading>
 

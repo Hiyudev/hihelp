@@ -9,9 +9,14 @@ import {
 import { Eye, EyeSlash } from "phosphor-react-native";
 import { useState } from "react";
 
-export function Input({ ...rest }: IInputProps) {
+type InputProps = IInputProps & {
+  error?: boolean;
+};
+
+export function Input({ error, ...rest }: InputProps) {
   const bgColor = useColorModeValue("gray.300", "gray.700");
   const txtColor = useColorModeValue("gray.700", "gray.300");
+  const borderColor = error ? "red.500" : "green.500";
 
   return (
     <NativeBaseInput
@@ -26,7 +31,7 @@ export function Input({ ...rest }: IInputProps) {
       color={txtColor}
       _focus={{
         borderWidth: 2,
-        borderColor: "green.500",
+        borderColor,
         bg: bgColor,
       }}
       {...rest}
@@ -34,7 +39,11 @@ export function Input({ ...rest }: IInputProps) {
   );
 }
 
-export function ShowInput({ ...rest }: IInputProps) {
+type ShowInputProps = IInputProps & {
+  error?: boolean;
+};
+
+export function ShowInput({ error, ...rest }: ShowInputProps) {
   const { colors } = useTheme();
   const txtColor = useColorModeValue(colors.gray[700], colors.gray[300]);
 
@@ -46,6 +55,7 @@ export function ShowInput({ ...rest }: IInputProps) {
 
   return (
     <Input
+      error={error}
       secureTextEntry={!show}
       InputRightElement={
         <IconButton

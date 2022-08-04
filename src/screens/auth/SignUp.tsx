@@ -9,6 +9,7 @@ import {
   VStack,
   Text,
   FormControl,
+  useToast,
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { Alert } from "react-native";
@@ -22,10 +23,13 @@ import { Button } from "../../components/Button";
 import { Input, ShowInput } from "../../components/Input";
 import { SignUpFormValidation } from "../../lib/zod/signUpValidation";
 import { z } from "zod";
+import { Toast } from "../../components/Toast";
 
 export function SignUp() {
   const { colors } = useTheme();
   const { toggleColorMode, colorMode } = useColorMode();
+  const toast = useToast();
+  const navigation = useNavigation();
 
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -36,8 +40,6 @@ export function SignUp() {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [genericError, setGenerticError] = useState(false);
-
-  const navigation = useNavigation();
 
   const bgColor = useColorModeValue("gray.100", "gray.900");
   const sbgColor = useColorModeValue("gray.200", "gray.800");
@@ -60,16 +62,31 @@ export function SignUp() {
           console.log(error);
           const errorCode = error.code;
           setIsLoading(false);
+          setGenerticError(true);
 
           switch (errorCode) {
             case "auth/invalid-email":
-              return Alert.alert("Cadastrar", "E-mail inválido.");
-            case "auth/weak-password":
-              return Alert.alert("Cadastrar", "Senha fraca.");
+              setEmailError("E-mail inválido");
+
+              return toast.show({
+                render: () => (
+                  <Toast style="danger" message="E-mail inválido" />
+                ),
+              });
             case "auth/email-already-in-use":
-              return Alert.alert("Cadastrar", "E-mail já em uso.");
+              setEmailError("E-mail já em uso");
+
+              return toast.show({
+                render: () => (
+                  <Toast style="danger" message="E-mail já em uso" />
+                ),
+              });
             default:
-              return Alert.alert("Cadastrar", "Erro ao entrar.");
+              return toast.show({
+                render: () => (
+                  <Toast style="danger" message="Erro ao tentar cadastrar" />
+                ),
+              });
           }
         });
     } catch (err) {
@@ -78,6 +95,10 @@ export function SignUp() {
         if (issues.length > 0) {
           issues.map((issue) => {
             const { path, message } = issue;
+            toast.show({
+              render: () => <Toast style="danger" message={message} />,
+            });
+
             if (path[0] === "email") {
               setEmailError(message);
             } else if (path[0] === "password") {

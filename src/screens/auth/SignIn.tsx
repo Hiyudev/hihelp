@@ -11,20 +11,23 @@ import {
   useColorMode,
   Text,
   FormControl,
+  useToast,
 } from "native-base";
 import { Envelope, Key, Moon, Sun } from "phosphor-react-native";
 import { useEffect, useState } from "react";
-import { Alert } from "react-native";
 import { z } from "zod";
 
 import Logo from "../../assets/Logo.svg";
 import { Button } from "../../components/Button";
 import { Input, ShowInput } from "../../components/Input";
+import { Toast } from "../../components/Toast";
 import { SignInFormValidation } from "../../lib/zod/signInValidation";
 
 export function SignIn() {
   const { toggleColorMode, colorMode } = useColorMode();
   const { colors } = useTheme();
+  const toast = useToast();
+  const navigation = useNavigation();
 
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -33,8 +36,6 @@ export function SignIn() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [genericError, setGenerticError] = useState(false);
-
-  const navigation = useNavigation();
 
   const bgColor = useColorModeValue("gray.100", "gray.900");
   const sbgColor = useColorModeValue("gray.200", "gray.800");
@@ -59,15 +60,20 @@ export function SignIn() {
           console.log(error);
           const errorCode = error.code;
           setIsLoading(false);
+          setGenerticError(true);
 
           switch (errorCode) {
-            case "auth/invalid-email":
-              return Alert.alert("Entrar", "E-mail inválido.");
             case "auth/user-not-found":
             case "auth/wrong-password":
-              return Alert.alert("Entrar", "E-mail ou senha inválida.");
+              return toast.show({
+                render: () => (
+                  <Toast style="danger" message="E-mail ou senha inválida" />
+                ),
+              });
             default:
-              return Alert.alert("Entrar", "Erro ao entrar.");
+              return toast.show({
+                render: () => <Toast style="danger" message="Erro ao entrar" />,
+              });
           }
         });
     } catch (err) {
@@ -75,12 +81,18 @@ export function SignIn() {
         const issues = err.issues;
         if (issues.length > 0) {
           issues.map((issue) => {
-            switch (issue.path[0]) {
+            const {path, message} = issue;
+
+            toast.show({
+              render: () => <Toast style="danger" message={message} />,
+            });
+            
+            switch (path[0]) {
               case "email":
-                setEmailError(issue.message);
+                setEmailError(message);
                 break;
               case "password":
-                setPasswordError(issue.message);
+                setPasswordError(message);
                 break;
             }
           });

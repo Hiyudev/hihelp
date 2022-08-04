@@ -9,6 +9,7 @@ import {
   useColorMode,
   Text,
   FormControl,
+  useToast,
 } from "native-base";
 import { Envelope, Moon, Sun } from "phosphor-react-native";
 import { useEffect, useState } from "react";
@@ -22,11 +23,12 @@ import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RecoverFormValidation } from "../../lib/zod/recoverValidation";
 import { z } from "zod";
+import { Toast } from "../../components/Toast";
 
 export function Recover() {
   const { colors } = useTheme();
   const { toggleColorMode, colorMode } = useColorMode();
-
+  const toast = useToast();
   const navigation = useNavigation();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -51,10 +53,16 @@ export function Recover() {
         .sendPasswordResetEmail(email)
         .then(() => {
           setIsLoading(false);
-          Alert.alert(
-            "Recuperar",
-            "E-mail para redefinir a senha foi enviada com sucesso."
-          );
+          toast.show({
+            render: () => (
+              <Toast
+                style="success"
+                message={
+                  "E-mail para redefinir a senha foi enviada com sucesso"
+                }
+              />
+            ),
+          });
           navigation.navigate("signin");
         })
         .catch((error) => {
@@ -64,10 +72,13 @@ export function Recover() {
 
           switch (errorCode) {
             case "auth/invalid-email":
-              return Alert.alert("Recuperar", "E-mail inválido.");
             case "auth/user-not-found":
             default:
-              return Alert.alert("Recuperar", "E-mail inválido.");
+              return toast.show({
+                render: () => (
+                  <Toast style="danger" message={"E-mail inválido"} />
+                ),
+              });
           }
         });
     } catch (err) {
@@ -76,9 +87,15 @@ export function Recover() {
 
         if (issues.length > 0) {
           issues.map((issue) => {
-            switch (issue.path[0]) {
+            const { path, message } = issue;
+
+            toast.show({
+              render: () => <Toast style="danger" message={message} />,
+            });
+
+            switch (path[0]) {
               case "email":
-                setEmailError(issue.message);
+                setEmailError(message);
                 break;
             }
           });

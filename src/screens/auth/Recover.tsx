@@ -8,9 +8,10 @@ import {
   IconButton,
   useColorMode,
   Text,
+  FormControl,
 } from "native-base";
 import { Envelope, Moon, Sun } from "phosphor-react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import auth from "@react-native-firebase/auth";
 
 import Logo from "../../assets/Logo.svg";
@@ -19,13 +20,19 @@ import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { RecoverFormValidation } from "../../lib/zod/recoverValidation";
+import { z } from "zod";
 
 export function Recover() {
   const { colors } = useTheme();
   const { toggleColorMode, colorMode } = useColorMode();
+
+  const navigation = useNavigation();
+
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
-  const navigation = useNavigation();
+  const [emailError, setEmailError] = useState("");
+  const [genericError, setGenerticError] = useState(false);
 
   const bgColor = useColorModeValue("gray.100", "gray.900");
   const sbgColor = useColorModeValue("gray.200", "gray.800");
@@ -33,35 +40,53 @@ export function Recover() {
   const txtColorObj = useColorModeValue(colors.gray[700], colors.gray[300]);
 
   function handleSignIn() {
-    if (!email) {
-      return Alert.alert("Recuperar", "Informe e-mail para recuperar senha.");
-    }
-
-    setIsLoading(true);
-
-    auth()
-      .sendPasswordResetEmail(email)
-      .then(() => {
-        setIsLoading(false);
-        Alert.alert(
-          "Recuperar",
-          "E-mail para redefinir a senha foi enviada com sucesso."
-        );
-        navigation.navigate("signin");
-      })
-      .catch((error) => {
-        console.log(error);
-        const errorCode = error.code;
-        setIsLoading(false);
-
-        switch (errorCode) {
-          case "auth/invalid-email":
-            return Alert.alert("Recuperar", "E-mail inválido.");
-          case "auth/user-not-found":
-          default:
-            return Alert.alert("Recuperar", "E-mail inválido.");
-        }
+    try {
+      RecoverFormValidation.parse({
+        email,
       });
+
+      setIsLoading(true);
+
+      auth()
+        .sendPasswordResetEmail(email)
+        .then(() => {
+          setIsLoading(false);
+          Alert.alert(
+            "Recuperar",
+            "E-mail para redefinir a senha foi enviada com sucesso."
+          );
+          navigation.navigate("signin");
+        })
+        .catch((error) => {
+          console.log(error);
+          const errorCode = error.code;
+          setIsLoading(false);
+
+          switch (errorCode) {
+            case "auth/invalid-email":
+              return Alert.alert("Recuperar", "E-mail inválido.");
+            case "auth/user-not-found":
+            default:
+              return Alert.alert("Recuperar", "E-mail inválido.");
+          }
+        });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const issues = err.issues;
+
+        if (issues.length > 0) {
+          issues.map((issue) => {
+            switch (issue.path[0]) {
+              case "email":
+                setEmailError(issue.message);
+                break;
+            }
+          });
+
+          setGenerticError(true);
+        }
+      }
+    }
   }
 
   const handleGoBack = () => {
@@ -71,6 +96,15 @@ export function Recover() {
   const handleChangeTheme = () => {
     toggleColorMode();
   };
+
+  const emailHasError = emailError.length > 0;
+
+  useEffect(() => {
+    if (!genericError) return;
+
+    setEmailError("");
+    setGenerticError(false);
+  }, [email]);
 
   return (
     <>
@@ -94,20 +128,26 @@ export function Recover() {
           <Logo color={useColorModeValue("black", "white")} />
         </HStack>
 
-        <Heading color={txtColor} fontSize="xl" mt={20} mb={6}>
+        <Heading color={txtColor} fontSize="xl" mt={16} mb={6}>
           Recuperar a sua senha
         </Heading>
 
-        <Input
-          placeholder="E-mail"
-          mb={4}
-          InputLeftElement={
-            <Icon ml={4} as={<Envelope color={txtColorObj} />} />
-          }
-          onChangeText={setEmail}
-        />
+        <FormControl mb={emailHasError ? 2 : 8} isInvalid={emailHasError}>
+          <FormControl.Label>Email</FormControl.Label>
+
+          <Input
+            placeholder="E-mail"
+            InputLeftElement={
+              <Icon ml={4} as={<Envelope color={txtColorObj} />} />
+            }
+            onChangeText={setEmail}
+          />
+
+          <FormControl.ErrorMessage>{emailError}</FormControl.ErrorMessage>
+        </FormControl>
 
         <Button
+          error={emailHasError}
           isLoading={isLoading}
           title="Recuperar"
           w="full"

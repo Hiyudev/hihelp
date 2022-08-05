@@ -7,6 +7,7 @@ import {
   Circle,
   Pressable,
   IPressableProps,
+  useColorModeValue,
 } from "native-base";
 import {
   CircleWavyCheck,
@@ -28,12 +29,23 @@ type OrderComponentProps = IPressableProps & {
 export function Order({ data, ...rest }: OrderComponentProps) {
   const { colors } = useTheme();
   const statusColor =
-    data.status === "open" ? colors.secondary[700] : colors.green[300];
+    data.status === "open"
+      ? useColorModeValue(colors.orange[700], colors.orange[500])
+      : useColorModeValue(colors.green[700], colors.green[500]);
+  const bgColor = useColorModeValue("gray.200", "gray.800");
+  const secondaryBgColor = useColorModeValue("gray.300", "gray.700");
+
+  const txtColor = useColorModeValue("gray.900", "gray.100");
+  const secondaryTxtColor = useColorModeValue("gray.800", "gray.200");
+  const secondaryTxtColorObj = useColorModeValue(
+    colors.gray[800],
+    colors.gray[200]
+  );
 
   return (
     <Pressable {...rest}>
       <HStack
-        bg="gray.600"
+        bg={bgColor}
         mb={4}
         alignItems={"center"}
         justifyContent={"space-between"}
@@ -43,19 +55,19 @@ export function Order({ data, ...rest }: OrderComponentProps) {
         <Box h="full" w={2} bg={statusColor} />
 
         <VStack flex={1} my={5} ml={5}>
-          <Text color="white" fontSize="md">
+          <Text color={txtColor} fontSize="md">
             Patrimônio: {data.patrimony}
           </Text>
 
           <HStack alignItems="center">
-            <ClockAfternoon size={15} color={colors.gray[300]} />
-            <Text color="gray.200" fontSize="xs" ml={1}>
+            <ClockAfternoon size={15} color={secondaryTxtColorObj} />
+            <Text color={secondaryTxtColor} fontSize="xs" ml={1}>
               {data.when}
             </Text>
           </HStack>
         </VStack>
 
-        <Circle bg="gray.500" h={12} w={12} mr={5}>
+        <Circle bg={secondaryBgColor} h={12} w={12} mr={5}>
           {data.status === "closed" ? (
             <CircleWavyCheck size={24} color={statusColor} />
           ) : (

@@ -7,24 +7,22 @@ import {
   useTheme,
   useColorModeValue,
   HStack,
-  IconButton,
-  useColorMode,
   Text,
   FormControl,
   useToast,
 } from "native-base";
-import { Envelope, Key, Moon, Sun } from "phosphor-react-native";
+import { Envelope, Key } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 
 import Logo from "../../assets/Logo.svg";
 import { Button } from "../../components/Button";
 import { Input, ShowInput } from "../../components/Input";
+import { ThemeSwitcher } from "../../components/ThemeSwitcher";
 import { Toast } from "../../components/Toast";
 import { SignInFormValidation } from "../../lib/zod/signInValidation";
 
 export function SignIn() {
-  const { toggleColorMode, colorMode } = useColorMode();
   const { colors } = useTheme();
   const toast = useToast();
   const navigation = useNavigation();
@@ -38,7 +36,6 @@ export function SignIn() {
   const [genericError, setGenerticError] = useState(false);
 
   const bgColor = useColorModeValue("gray.100", "gray.900");
-  const sbgColor = useColorModeValue("gray.200", "gray.800");
   const txtColor = useColorModeValue("gray.900", "gray.100");
   const txtColorObj = useColorModeValue(colors.gray[700], colors.gray[300]);
 
@@ -110,10 +107,6 @@ export function SignIn() {
     navigation.navigate("recover");
   };
 
-  const handleChangeTheme = () => {
-    toggleColorMode();
-  };
-
   useEffect(() => {
     if (!genericError) return;
 
@@ -125,21 +118,8 @@ export function SignIn() {
   return (
     <>
       <VStack flex={1} alignItems="center" bg={bgColor} px={8} pt={24}>
-        <IconButton
-          position="absolute"
-          right={8}
-          top={8}
-          bg={sbgColor}
-          rounded="full"
-          onPress={handleChangeTheme}
-          icon={
-            colorMode === "dark" ? (
-              <Moon size={24} color={colors.blue[300]} />
-            ) : (
-              <Sun size={24} color={colors.orange[700]} />
-            )
-          }
-        />
+        <ThemeSwitcher position={"absolute"} right={8} top={8} />
+
         <HStack>
           <Logo color={useColorModeValue("black", "white")} />
         </HStack>

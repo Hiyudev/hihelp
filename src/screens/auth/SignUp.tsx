@@ -2,8 +2,6 @@ import {
   Heading,
   HStack,
   Icon,
-  IconButton,
-  useColorMode,
   useColorModeValue,
   useTheme,
   VStack,
@@ -12,10 +10,9 @@ import {
   useToast,
 } from "native-base";
 import React, { useEffect, useState } from "react";
-import { Alert } from "react-native";
 import auth from "@react-native-firebase/auth";
 import { useNavigation } from "@react-navigation/native";
-import { Moon, Sun, Envelope, Key } from "phosphor-react-native";
+import { Envelope, Key } from "phosphor-react-native";
 
 import Logo from "../../assets/Logo.svg";
 
@@ -24,10 +21,10 @@ import { Input, ShowInput } from "../../components/Input";
 import { SignUpFormValidation } from "../../lib/zod/signUpValidation";
 import { z } from "zod";
 import { Toast } from "../../components/Toast";
+import { ThemeSwitcher } from "../../components/ThemeSwitcher";
 
 export function SignUp() {
   const { colors } = useTheme();
-  const { toggleColorMode, colorMode } = useColorMode();
   const toast = useToast();
   const navigation = useNavigation();
 
@@ -42,7 +39,6 @@ export function SignUp() {
   const [genericError, setGenerticError] = useState(false);
 
   const bgColor = useColorModeValue("gray.100", "gray.900");
-  const sbgColor = useColorModeValue("gray.200", "gray.800");
   const txtColor = useColorModeValue("gray.900", "gray.100");
   const txtColorObj = useColorModeValue(colors.gray[700], colors.gray[300]);
 
@@ -118,10 +114,6 @@ export function SignUp() {
     navigation.navigate("signin");
   };
 
-  const handleChangeTheme = () => {
-    toggleColorMode();
-  };
-
   const hasEmailError = emailError.length > 0;
   const hasPasswordError = passwordError.length > 0;
   const hasConfirmPasswordError = confirmPasswordError.length > 0;
@@ -138,21 +130,7 @@ export function SignUp() {
   return (
     <>
       <VStack flex={1} alignItems="center" bg={bgColor} px={8} pt={24}>
-        <IconButton
-          position={"absolute"}
-          right={8}
-          top={8}
-          bg={sbgColor}
-          rounded="full"
-          onPress={handleChangeTheme}
-          icon={
-            colorMode == "dark" ? (
-              <Moon size={24} color={colors.blue[300]} />
-            ) : (
-              <Sun size={24} color={colors.orange[700]} />
-            )
-          }
-        />
+        <ThemeSwitcher position={"absolute"} right={8} top={8} />
         <HStack>
           <Logo color={useColorModeValue("black", "white")} />
         </HStack>

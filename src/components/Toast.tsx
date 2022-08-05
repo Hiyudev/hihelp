@@ -1,11 +1,4 @@
-import {
-  Box,
-  HStack,
-  Icon,
-  Text,
-  useColorModeValue,
-  useTheme,
-} from "native-base";
+import { Box, HStack, Icon, Text, useTheme } from "native-base";
 import { CheckCircle, HandWaving, WarningCircle } from "phosphor-react-native";
 
 type ToastStyles = "success" | "danger" | "welcome";
@@ -16,7 +9,6 @@ type ToastProps = {
 };
 export function Toast({ style, message }: ToastProps) {
   let bgColor: string;
-  let txtColor: string;
   const { colors } = useTheme();
 
   let icon: JSX.Element;

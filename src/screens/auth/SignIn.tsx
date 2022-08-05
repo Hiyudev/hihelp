@@ -81,12 +81,12 @@ export function SignIn() {
         const issues = err.issues;
         if (issues.length > 0) {
           issues.map((issue) => {
-            const {path, message} = issue;
+            const { path, message } = issue;
 
             toast.show({
               render: () => <Toast style="danger" message={message} />,
             });
-            
+
             switch (path[0]) {
               case "email":
                 setEmailError(message);

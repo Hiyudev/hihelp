@@ -1,6 +1,13 @@
 import firestore from "@react-native-firebase/firestore";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { HStack, ScrollView, Text, useTheme, VStack } from "native-base";
+import {
+  HStack,
+  ScrollView,
+  Text,
+  useColorModeValue,
+  useTheme,
+  VStack,
+} from "native-base";
 import {
   CircleWavyCheck,
   DesktopTower,
@@ -30,15 +37,20 @@ type OrderDetails = OrderProps & {
 };
 
 export function Details() {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { colors } = useTheme();
+  const { orderId } = route.params as RouteParams;
+
   const [isLoading, setIsLoading] = useState(true);
   const [solution, setSolution] = useState("");
   const [order, setOrder] = useState<OrderDetails>({} as OrderDetails);
 
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { colors } = useTheme();
+  const bgColor = useColorModeValue("gray.100", "gray.900");
+  const secondaryBgColor = useColorModeValue("gray.200", "gray.800");
 
-  const { orderId } = route.params as RouteParams;
+  const orangeColor = useColorModeValue(colors.orange[700], colors.orange[500]);
+  const greenColor = useColorModeValue(colors.green[700], colors.green[500]);
 
   const handleCloseOrder = () => {
     if (!solution) {
@@ -104,20 +116,18 @@ export function Details() {
   }
 
   return (
-    <VStack flex={1} bg="gray.700">
+    <VStack flex={1} bg={bgColor}>
       <Header title="Solicitação" />
 
-      <HStack justifyContent="center" p={4} bg="gray.500">
+      <HStack justifyContent="center" p={4} bg={secondaryBgColor}>
         {order.status == "closed" ? (
-          <CircleWavyCheck size={22} color={colors.green[300]} />
+          <CircleWavyCheck size={22} color={greenColor} />
         ) : (
-          <Hourglass size={22} color={colors.secondary[300]} />
+          <Hourglass size={22} color={orangeColor} />
         )}
 
         <Text
-          color={
-            order.status == "closed" ? colors.green[300] : colors.secondary[700]
-          }
+          color={order.status == "closed" ? greenColor : orangeColor}
           ml={2}
           fontSize="sm"
           textTransform="uppercase"

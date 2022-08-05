@@ -10,5 +10,8 @@ export const THEME = extendTheme({
     sm: 14,
     md: 16,
     lg: 20,
-  }
+  },
+  config: {
+    initialColorMode: 'dark',
+  },
 });

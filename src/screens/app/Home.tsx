@@ -10,17 +10,19 @@ import {
   Heading,
   FlatList,
   Center,
+  useColorModeValue,
 } from "native-base";
 import { ChatTeardropText, SignOut } from "phosphor-react-native";
 import { useEffect, useState } from "react";
 
-import Logo from "../../assets/Logotipo.svg";
+import Logotipo from "../../assets/Logotipo.svg";
 import { Button } from "../../components/Button";
 import { Filter } from "../../components/Filter";
 import { Order, OrderProps } from "../../components/Order";
 import { Alert } from "react-native";
 import { formatFirestoreDate } from "../../utils/firestoreDateFormat";
 import { Loading } from "../../components/Loading";
+import { ThemeSwitcher } from "../../components/ThemeSwitcher";
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,6 +32,15 @@ export function Home() {
   );
   const { colors } = useTheme();
   const navigation = useNavigation();
+
+  const bgColor = useColorModeValue("gray.100", "gray.900");
+  const secondaryBgColor = useColorModeValue("gray.200", "gray.800");
+
+  const txtColor = useColorModeValue("gray.900", "gray.100");
+  const secondaryTxtColor = useColorModeValue("gray.800", "gray.200");
+
+  const logoColor = useColorModeValue("black", "white");
+  const logoColorTxt = useColorModeValue(colors.gray[900], colors.gray[100]);
 
   const handleNewOrder = () => {
     navigation.navigate("new");
@@ -75,22 +86,26 @@ export function Home() {
   }, [statusSelected]);
 
   return (
-    <VStack flex={1} pb={6} bg="gray.700">
+    <VStack flex={1} pb={6} bg={bgColor}>
       <HStack
         w="full"
         justifyContent={"space-between"}
         alignItems={"center"}
-        bg="gray.600"
+        bg={secondaryBgColor}
         pt={12}
         pb={5}
         px={6}
       >
-        <Logo />
+        <Logotipo height={32} width={74} color={logoColor} />
 
-        <IconButton
-          onPress={handleLogout}
-          icon={<SignOut size={26} color={colors.gray[300]} />}
-        />
+        <HStack>
+          <ThemeSwitcher />
+
+          <IconButton
+            onPress={handleLogout}
+            icon={<SignOut size={26} color={logoColorTxt} />}
+          />
+        </HStack>
       </HStack>
 
       <VStack flex={1} px={6}>
@@ -101,8 +116,8 @@ export function Home() {
           justifyContent="space-between"
           alignItems={"center"}
         >
-          <Heading color={"gray.100"}>Solicitações</Heading>
-          <Text color={"gray.200"}>{orders?.length ?? 0}</Text>
+          <Heading color={txtColor}>Solicitações</Heading>
+          <Text color={secondaryTxtColor}>{orders?.length ?? 0}</Text>
         </HStack>
 
         <HStack space={3} mb={8}>

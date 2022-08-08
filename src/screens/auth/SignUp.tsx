@@ -130,7 +130,7 @@ export function SignUp() {
   return (
     <>
       <VStack flex={1} alignItems="center" bg={bgColor} px={8} pt={24}>
-        <ThemeSwitcher position={"absolute"} right={8} top={8} />
+        <ThemeSwitcher position={"absolute"} right={8} top={12} />
         <HStack>
           <Logo color={useColorModeValue("black", "white")} />
         </HStack>

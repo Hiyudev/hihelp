@@ -153,12 +153,12 @@ export function Home() {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 100 }}
             ListEmptyComponent={() => (
-              <Center>
+              <Center mt={32}>
                 <ChatTeardropText color={tertiaryTxtColorObj} size={40} />
                 <Text
                   color={tertiaryTxtColor}
                   fontSize="xl"
-                  mt={6}
+                  mt={4}
                   textAlign="center"
                 >
                   Você ainda não possui{"\n"}

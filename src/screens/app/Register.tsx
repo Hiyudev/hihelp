@@ -162,6 +162,7 @@ export function Register() {
         </ScrollView>
 
         <Button
+          error={genericError}
           isLoading={isLoading}
           onPress={handleNewOrderRegister}
           title="Cadastrar"

@@ -53,6 +53,13 @@ export function SignIn() {
 
       auth()
         .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          toast.show({
+            render: () => (
+              <Toast style="welcome" message="Bem-vindo de volta usuário!" />
+            ),
+          });
+        })
         .catch((error) => {
           console.log(error);
           const errorCode = error.code;

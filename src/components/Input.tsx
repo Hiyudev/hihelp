@@ -39,7 +39,7 @@ export function Input({ error, ...rest }: InputProps) {
   );
 }
 
-type ShowInputProps = IInputProps & {
+type ShowInputProps = InputProps & {
   error?: boolean;
 };
 

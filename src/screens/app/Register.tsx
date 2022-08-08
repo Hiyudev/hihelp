@@ -1,4 +1,12 @@
-import { VStack } from "native-base";
+import {
+  Box,
+  FormControl,
+  Icon,
+  ScrollView,
+  useColorModeValue,
+  useTheme,
+  VStack,
+} from "native-base";
 import { useState } from "react";
 import { Alert } from "react-native";
 import firestore from "@react-native-firebase/firestore";
@@ -7,12 +15,23 @@ import { useNavigation } from "@react-navigation/native";
 import { Button } from "../../components/Button";
 import { Header } from "../../components/Header";
 import { Input } from "../../components/Input";
+import { DesktopTower, TextAlignLeft } from "phosphor-react-native";
 
 export function Register() {
+  const { colors } = useTheme();
+  const navigation = useNavigation();
+
   const [isLoading, setIsLoading] = useState(false);
   const [patrimony, setPatrimony] = useState("");
   const [description, setDescription] = useState("");
-  const navigation = useNavigation();
+
+  const bgColor = useColorModeValue("gray.100", "gray.900");
+  const secondaryBgColor = useColorModeValue("gray.200", "gray.800");
+
+  const txtColor = useColorModeValue("gray.900", "gray.100");
+  const secondaryTxtColor = useColorModeValue("gray.800", "gray.200");
+
+  const iconColor = useColorModeValue(colors.indigo[700], colors.indigo[300]);
 
   function handleNewOrderRegister() {
     if (!patrimony || !description) {
@@ -41,30 +60,56 @@ export function Register() {
   }
 
   return (
-    <VStack flex={1} p={6} bg="gray.600">
+    <VStack flex={1} bg={bgColor}>
       <Header title="Solicitação" />
 
-      <Input
-        onChangeText={setPatrimony}
-        mt={4}
-        placeholder="Número do patrimonio"
-      />
+      <VStack flex={1} justifyContent={"space-between"} mt={4} p={6}>
+        <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+          <VStack>
+            <FormControl>
+              <FormControl.Label>Número do patrimônio</FormControl.Label>
+              <Input
+                keyboardType="numeric"
+                InputLeftElement={
+                  <Icon
+                    ml={4}
+                    as={<DesktopTower size={24} color={iconColor} />}
+                  />
+                }
+                onChangeText={setPatrimony}
+                placeholder="Número do patrimonio"
+              />
+              <FormControl.ErrorMessage>
+                O número do patrimônio é obrigatório.
+              </FormControl.ErrorMessage>
+            </FormControl>
+          </VStack>
 
-      <Input
-        onChangeText={setDescription}
-        placeholder="Descrição do problema"
-        mt={5}
-        flex={1}
-        multiline
-        textAlignVertical="top"
-      />
+          <VStack flex={1}>
+            <FormControl mt={5}>
+              <FormControl.Label>Descrição do problema</FormControl.Label>
+              <Input
+                onChangeText={setDescription}
+                placeholder="Descrição do problema"
+                flex={1}
+                multiline
+                h="96"
+                textAlignVertical="top"
+              />
+              <FormControl.ErrorMessage>
+                Descrição do problema é obrigatório.
+              </FormControl.ErrorMessage>
+            </FormControl>
+          </VStack>
+        </ScrollView>
 
-      <Button
-        isLoading={isLoading}
-        onPress={handleNewOrderRegister}
-        mt={5}
-        title="Cadastrar"
-      />
+        <Button
+          isLoading={isLoading}
+          onPress={handleNewOrderRegister}
+          title="Cadastrar"
+          mt={5}
+        />
+      </VStack>
     </VStack>
   );
 }

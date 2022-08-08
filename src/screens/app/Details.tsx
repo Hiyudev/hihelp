@@ -203,7 +203,7 @@ export function Details() {
           title="Solução"
           icon={CircleWavyCheck}
           description={order.solution}
-          footer={order.closed && `Encerrado me ${order.closed}`}
+          footer={order.closed && `Encerrado em ${order.closed}`}
         >
           {order.status == "open" && (
             <FormControl isInvalid={hasSolutionError}>

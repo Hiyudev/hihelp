@@ -38,9 +38,14 @@ export function Home() {
 
   const txtColor = useColorModeValue("gray.900", "gray.100");
   const secondaryTxtColor = useColorModeValue("gray.800", "gray.200");
+  const tertiaryTxtColor = useColorModeValue("gray.700", "gray.300");
+  const tertiaryTxtColorObj = useColorModeValue(
+    colors.gray[700],
+    colors.gray[300]
+  );
 
   const logoColor = useColorModeValue("black", "white");
-  const logoColorTxt = useColorModeValue(colors.gray[900], colors.gray[100]);
+  const logoColorObj = useColorModeValue(colors.black, colors.white);
 
   const handleNewOrder = () => {
     navigation.navigate("new");
@@ -103,7 +108,7 @@ export function Home() {
 
           <IconButton
             onPress={handleLogout}
-            icon={<SignOut size={26} color={logoColorTxt} />}
+            icon={<SignOut size={26} color={logoColorObj} />}
           />
         </HStack>
       </HStack>
@@ -149,8 +154,13 @@ export function Home() {
             contentContainerStyle={{ paddingBottom: 100 }}
             ListEmptyComponent={() => (
               <Center>
-                <ChatTeardropText color={colors.gray[300]} size={40} />
-                <Text color="gray.300" fontSize="xl" mt={6} textAlign="center">
+                <ChatTeardropText color={tertiaryTxtColorObj} size={40} />
+                <Text
+                  color={tertiaryTxtColor}
+                  fontSize="xl"
+                  mt={6}
+                  textAlign="center"
+                >
                   Você ainda não possui{"\n"}
                   solicitações{" "}
                   {statusSelected === "open" ? "em andamento" : "finalizadas"}

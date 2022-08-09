@@ -12,6 +12,7 @@
 
 <p align="center">
  <a href="#about">About</a> •
+ <a href="#features">Features</a> •
  <a href="#started">Getting started</a> •
  <a href="#built_using">Technologies</a> •
  <a href="#authors">Authors</a> •
@@ -32,6 +33,14 @@ And this event was conducted by [Rodrigo Gonçalves](https://github.com/rodrigo
 <p align="center">
   <img src=".github/Mockups.png" alt="Mockups"/>
 </p>
+
+## 🚀 Features <a name = "features"></a>
+
+- Auth functionalities such as sign up, sign in, sign out, and recover password made with Firebase Auth
+- Register equipments failures with patrimony number and description made with Firebase Firestore
+- Real-time list of equipments failures with Firebase data snapshots
+- Form validation for fast, reliable, and custom feedbacks made with Zod
+- Theme support (Light / Dark mode) with Nativebase
 
 ## 🏁 Getting Started <a name = "started"></a>
 
@@ -70,11 +79,13 @@ yarn install
 3. Run the project locally on an emulator ( Its not possible to run on physical device because Expo + Firebase does not support Expo Go mobile application )
 
 > On android
+
 ```
 yarn android
 ```
 
 > On iOS
+
 ```
 yarn ios
 ```
